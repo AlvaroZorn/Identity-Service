@@ -1,6 +1,7 @@
 package com.zorn.identityservice.controller;
 
 import com.zorn.identityservice.dto.UserDto;
+import com.zorn.identityservice.model.User;
 import com.zorn.identityservice.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserDto userDto) {
-        authService.register(userDto);
-        return ResponseEntity.ok("User Registration Successful");
+        User user = authService.register(userDto);
+        return ResponseEntity.ok("User Registration for the user with the email address " + user.getEmail() + " successfully!");
     }
 }

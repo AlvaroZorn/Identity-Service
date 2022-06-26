@@ -40,7 +40,7 @@ public class MailService {
 
         try {
             mailSender.send(messagePreparator);
-            log.info("Activation email sent!!");
+            log.info("Email was successfully sent!");
         } catch (MailException e) {
             log.error("Exception occurred when sending mail", e);
             throw new IdentityServiceException("Exception occurred when sending mail to " + email.getTo(), e);

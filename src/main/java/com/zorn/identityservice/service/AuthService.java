@@ -4,8 +4,10 @@ import com.zorn.identityservice.dto.UserDto;
 import com.zorn.identityservice.model.Email;
 import com.zorn.identityservice.model.User;
 import com.zorn.identityservice.model.VerificationToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class AuthService {
 
@@ -19,9 +21,10 @@ public class AuthService {
         this.mailService = mailService;
     }
 
-    public void register(UserDto userDto) {
+    public User register(UserDto userDto) {
 
         User user = userService.saveUser(userDto);
+
         VerificationToken verificationToken = verificationTokenService.saveToken(user);
 
         Email email = Email.builder()
@@ -31,6 +34,8 @@ public class AuthService {
                 .build();
 
         mailService.sendMail(email);
+
+        return user;
     }
 
 }

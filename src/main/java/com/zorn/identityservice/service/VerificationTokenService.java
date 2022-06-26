@@ -3,13 +3,14 @@ package com.zorn.identityservice.service;
 import com.zorn.identityservice.model.User;
 import com.zorn.identityservice.model.VerificationToken;
 import com.zorn.identityservice.repository.VerificationTokenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class VerificationTokenService {
 
@@ -31,6 +32,7 @@ public class VerificationTokenService {
                 .build();
 
         verificationTokenRepository.save(verificationToken);
+        log.info("Token was saved successfully");
 
         return verificationToken;
     }

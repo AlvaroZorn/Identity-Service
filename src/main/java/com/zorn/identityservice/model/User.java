@@ -1,7 +1,9 @@
 package com.zorn.identityservice.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -11,6 +13,8 @@ import java.time.Instant;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "\"user\"") // user is a reserved keyword in PostgreSQL. It is allowed only as quoted identifier.
 public class User {
