@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  database:
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+  mailtrap:
+    image: dbck/mailtrap:latest
+    ports:
+      - 9025:25
+    environment:
+      - MAILTRAP_USER=mailtrap
+      - MAILTRAP_PASSWORD=mailtrap
+      - MAILTRAP_MAILBOX_LIMIT=51200000
+      - MAILTRAP_MESSAGE_LIMIT=10240000
+      - MAILTRAP_MAX_RECIPIENT_LIMIT=1000

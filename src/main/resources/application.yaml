@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/identity_database
+    username: test_user
+    password: test_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  mail:
+    host: smtp.mailtrap.io
+    port: 25
+    username: 586dd54b312a85
+    password: 6e9bdf1e4c4d1a
+    protocol: smtp
+
+email:
+  systemEmail: identity@service.de
+
+verificationToken:
+  expiryTime: 1800000
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: TRACE
+
