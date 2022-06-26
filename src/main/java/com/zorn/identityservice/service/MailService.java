@@ -1,8 +1,6 @@
 package com.zorn.identityservice.service;
 
 import com.zorn.identityservice.exception.IdentityServiceException;
-import com.zorn.identityservice.model.User;
-import com.zorn.identityservice.model.VerificationToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -30,19 +28,14 @@ public class MailService {
     }
 
     @Async
-    public void sendRegistrationMail(User user, VerificationToken verificationToken) {
-        Context context = new Context();
-        context.setVariable("username", user.getUsername());
-        context.setVariable("verificationLink", "http://localhost:8080/api/v1/auth/accountVerification/" + verificationToken.getToken());
-
-        String body = templateEngine.process("mail-templates/registration", context);
+    public void sendMail(Context context, String template, String to, String subject) {
 
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(systemEmail);
-            messageHelper.setTo(user.getEmail());
-            messageHelper.setSubject("Please Activate your Account");
-            messageHelper.setText(body, true);
+            messageHelper.setTo(to);
+            messageHelper.setSubject(subject);
+            messageHelper.setText(templateEngine.process(template, context), true);
         };
 
         try {
@@ -50,7 +43,8 @@ public class MailService {
             log.info("Email was successfully sent!");
         } catch (MailException e) {
             log.error("Exception occurred when sending mail", e);
-            throw new IdentityServiceException("Exception occurred when sending mail to " + user.getEmail(), e);
+            throw new IdentityServiceException("Exception occurred when sending mail to " + to, e);
         }
+
     }
 }

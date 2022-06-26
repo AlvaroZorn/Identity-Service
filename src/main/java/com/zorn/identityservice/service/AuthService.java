@@ -1,11 +1,11 @@
 package com.zorn.identityservice.service;
 
 import com.zorn.identityservice.dto.UserDto;
-import com.zorn.identityservice.model.Email;
 import com.zorn.identityservice.model.User;
 import com.zorn.identityservice.model.VerificationToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 @Slf4j
 @Service
@@ -27,13 +27,11 @@ public class AuthService {
 
         VerificationToken verificationToken = verificationTokenService.saveToken(user);
 
-        Email email = Email.builder()
-                .subject("Please Activate your Account")
-                .text("Thank you for registering, please click on the below url to activate your account: http://localhost:8080/api/auth/accountVerification/" + verificationToken.getToken())
-                .to(user.getEmail())
-                .build();
+        Context context = new Context();
+        context.setVariable("username", user.getUsername());
+        context.setVariable("verificationLink", "http://localhost:8080/api/v1/auth/accountVerification/" + verificationToken.getToken());
 
-        mailService.sendRegistrationMail(user, verificationToken);
+        mailService.sendMail(context, "mail-templates/registration", user.getEmail(), "Please Activate your Account");
 
         return user;
     }
