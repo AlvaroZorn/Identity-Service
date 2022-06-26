@@ -1,7 +1,8 @@
 package com.zorn.identityservice.service;
 
 import com.zorn.identityservice.exception.IdentityServiceException;
-import com.zorn.identityservice.model.Email;
+import com.zorn.identityservice.model.User;
+import com.zorn.identityservice.model.VerificationToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -29,13 +30,19 @@ public class MailService {
     }
 
     @Async
-    public void sendMail(Email email) {
+    public void sendRegistrationMail(User user, VerificationToken verificationToken) {
+        Context context = new Context();
+        context.setVariable("username", user.getUsername());
+        context.setVariable("verificationLink", "http://localhost:8080/api/v1/auth/accountVerification/" + verificationToken.getToken());
+
+        String body = templateEngine.process("mail-templates/registration", context);
+
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(systemEmail);
-            messageHelper.setTo(email.getTo());
-            messageHelper.setSubject(email.getSubject());
-            messageHelper.setText(email.getText());
+            messageHelper.setTo(user.getEmail());
+            messageHelper.setSubject("Please Activate your Account");
+            messageHelper.setText(body, true);
         };
 
         try {
@@ -43,13 +50,7 @@ public class MailService {
             log.info("Email was successfully sent!");
         } catch (MailException e) {
             log.error("Exception occurred when sending mail", e);
-            throw new IdentityServiceException("Exception occurred when sending mail to " + email.getTo(), e);
+            throw new IdentityServiceException("Exception occurred when sending mail to " + user.getEmail(), e);
         }
-    }
-
-    public String build(String message) {
-        Context context = new Context();
-        context.setVariable("message", message);
-        return templateEngine.process("mailTemplate", context);
     }
 }

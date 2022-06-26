@@ -33,7 +33,7 @@ public class AuthService {
                 .to(user.getEmail())
                 .build();
 
-        mailService.sendMail(email);
+        mailService.sendRegistrationMail(user, verificationToken);
 
         return user;
     }
