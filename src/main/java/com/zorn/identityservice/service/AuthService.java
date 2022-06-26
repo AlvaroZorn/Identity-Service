@@ -29,7 +29,7 @@ public class AuthService {
 
         Email email = Email.builder()
                 .subject("Please Activate your Account")
-                .text("Thank you for signing up to Spring Reddit, please click on the below url to activate your account: http://localhost:8080/api/auth/accountVerification/" + verificationToken.getToken())
+                .text("Thank you for registering, please click on the below url to activate your account: http://localhost:8080/api/auth/accountVerification/" + verificationToken.getToken())
                 .to(user.getEmail())
                 .build();
 
