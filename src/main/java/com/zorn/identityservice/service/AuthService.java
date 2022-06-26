@@ -4,6 +4,7 @@ import com.zorn.identityservice.dto.UserDto;
 import com.zorn.identityservice.model.User;
 import com.zorn.identityservice.model.VerificationToken;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
@@ -14,6 +15,9 @@ public class AuthService {
     private final UserService userService;
     private final VerificationTokenService verificationTokenService;
     private final MailService mailService;
+
+    @Value("${verification.path}")
+    private String verificationPath;
 
     public AuthService(UserService userService, VerificationTokenService verificationTokenService, MailService mailService) {
         this.userService = userService;
@@ -29,7 +33,7 @@ public class AuthService {
 
         Context context = new Context();
         context.setVariable("username", user.getUsername());
-        context.setVariable("verificationLink", "http://localhost:8080/api/v1/auth/accountVerification/" + verificationToken.getToken());
+        context.setVariable("verificationLink", "http://localhost:8080" + verificationPath + "/" + verificationToken.getToken());
 
         mailService.sendMail(context, "mail-templates/registration", user.getEmail(), "Please Activate your Account");
 

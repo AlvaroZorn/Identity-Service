@@ -22,8 +22,9 @@ spring:
 email:
   systemEmail: identity@service.de
 
-verificationToken:
-  expiryTime: 1800000
+verification:
+  tokenExpiryTime: 1800000
+  path: /api/v1/auth/verification
 
 logging:
   level:

@@ -16,8 +16,8 @@ public class VerificationTokenService {
 
     private final VerificationTokenRepository verificationTokenRepository;
 
-    @Value("${verificationToken.expiryTime}")
-    private int expiryTime;
+    @Value("${verification.tokenExpiryTime}")
+    private int tokenExpiryTime;
 
     public VerificationTokenService(VerificationTokenRepository verificationTokenRepository) {
         this.verificationTokenRepository = verificationTokenRepository;
@@ -28,7 +28,7 @@ public class VerificationTokenService {
         VerificationToken verificationToken = VerificationToken.builder()
                 .token(UUID.randomUUID().toString())
                 .user(user)
-                .expiryDate(Instant.now().plusMillis(expiryTime))
+                .expiryDate(Instant.now().plusMillis(tokenExpiryTime))
                 .build();
 
         verificationTokenRepository.save(verificationToken);
